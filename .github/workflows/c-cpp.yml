@@ -1,0 +1,30 @@
+name: Build DLL
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Visual Studio
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build solution
+      run: msbuild /p:Configuration=Release /p:Platform=x64 YourSolution.sln
+
+    - name: Archive artifacts
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: dll-files
+        path: path/to/your/dll/files/*.dll
